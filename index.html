@@ -34,6 +34,7 @@
     .navlinks::-webkit-scrollbar{display:none}
     .navlinks a{padding:8px 12px;border:1px solid transparent;border-radius:999px;transition:background .2s,border-color .2s,color .2s}
     .navlinks a:hover,.navlinks a:focus-visible{background:#ffffff0d;border-color:#e8c9ef30;color:#fff}
+    .navlinks a[aria-current="location"]{color:#fff;background:#ffffff12;border-color:#e0c1fa55;box-shadow:inset 0 1px #ffffff12}
     .hero{min-height:86vh}
     .hero>div{position:relative;z-index:1;max-width:780px;padding:clamp(26px,5vw,52px);border:1px solid #f6e9ff20;border-radius:32px;background:linear-gradient(145deg,#ffffff0b,#ffffff03);box-shadow:0 28px 90px #08050d45,inset 0 1px #ffffff0b}
     .hero h1{letter-spacing:-.045em;text-shadow:0 8px 36px #d9b8f225}
@@ -222,6 +223,21 @@ document.getElementById('sharePage').addEventListener('click',async()=>{
     if(error&&error.name==='AbortError'){status.textContent='No se compartió el enlace.'}
     else{status.textContent='No se pudo compartir automáticamente. Puedes copiar el enlace desde tu navegador.'}
   }finally{button.disabled=false}
+});
+// Indicar en la navegación la sección que se está leyendo.
+const sectionLinks=[...document.querySelectorAll('.navlinks a[href^="#"]')];
+const sectionObserver=new IntersectionObserver(entries=>{
+  const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+  if(!visible.length)return;
+  const current="#"+visible[0].target.id;
+  sectionLinks.forEach(link=>{
+    if(link.getAttribute("href")===current)link.setAttribute("aria-current","location");
+    else link.removeAttribute("aria-current");
+  });
+},{rootMargin:"-130px 0px -60% 0px",threshold:0});
+sectionLinks.forEach(link=>{
+  const section=document.querySelector(link.getAttribute("href"));
+  if(section)sectionObserver.observe(section);
 });
 const topLink=document.querySelector(".top");
 function updateTopLink(){topLink.hidden=window.scrollY<480}
