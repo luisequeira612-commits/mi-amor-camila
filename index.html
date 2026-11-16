@@ -99,6 +99,7 @@
     @media(max-width:360px){.items{grid-template-columns:1fr}.counter{gap:5px}.countbox span{font-size:.58rem}}
     @media(prefers-reduced-motion:reduce){.story article,.dream,.letter-card,.navlinks a,.answers button{transition:none!important}}
 
+    .top[hidden]{display:none}
     #sharePage{margin-top:12px}#sharePage:disabled{opacity:.65;cursor:wait}#shareStatus{min-height:1.5em;margin:8px 0 0}
   
     /* Álbum: marcos verticales preparados para fotografías reales */
@@ -171,7 +172,7 @@
 <section class="section" id="cancion"><div class="wrap center"><div class="section-head"><div class="kicker">Nuestra canción especial</div><h2>You &amp; Me</h2><p>Una canción de Jennie que quiero compartir contigo.</p></div><a class="btn ghost" href="https://open.spotify.com/search/JENNIE%20You%20%26%20Me" target="_blank" rel="noopener noreferrer">Buscar “You &amp; Me” en Spotify ♫</a><p class="tiny">El enlace abre Spotify; la reproducción depende de tu cuenta y de la disponibilidad del servicio.</p></div></section>
 </main>
 <footer><div class="eyebrow">Para ti, mi amor</div><h2>Cada día te voy a amar<br>un poquito más.</h2><p>Hoy, mañana y en cada nuevo día que la vida nos regale. 💜</p><p class="tiny">Hecho con mucho cariño.</p><button class="btn ghost" id="sharePage" type="button">Compartir esta página ♡</button><p class="tiny" id="shareStatus" role="status" aria-live="polite"></p></footer>
-<a class="top" href="#inicio" aria-label="Volver al inicio">↑</a>
+<a class="top" href="#inicio" aria-label="Volver al inicio" hidden>↑</a>
 <script>
 const reasons = [
 "Me haces feliz.","Me encanta tu personalidad.","Me tratas con mucho cariño.","Tenemos muchas cosas en común.","Me alegra saber que me amas.","Me gusta hablar contigo.","Haces especiales mis días normales.","Me gusta conocerte cada día más.","Me haces sonreír.","Me ilusiona nuestro futuro.",
@@ -222,5 +223,9 @@ document.getElementById('sharePage').addEventListener('click',async()=>{
     else{status.textContent='No se pudo compartir automáticamente. Puedes copiar el enlace desde tu navegador.'}
   }finally{button.disabled=false}
 });
+const topLink=document.querySelector(".top");
+function updateTopLink(){topLink.hidden=window.scrollY<480}
+window.addEventListener("scroll",updateTopLink,{passive:true});
+updateTopLink();
 </script>
 </body></html>
