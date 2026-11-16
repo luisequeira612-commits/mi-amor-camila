@@ -177,6 +177,8 @@ const promises = [
 ];
 function fillList(id, arr, label){document.getElementById(id).innerHTML=arr.map((v,i)=>'<div class="'+(id==='reasons'?'reason':'promise')+'"><span>'+label+' '+(i+1)+'</span>'+v+'</div>').join('')}
 fillList('reasons',reasons,'Razón');fillList('promises',promises,'Promesa');
+// Mantener una sola carta abierta a la vez, como indica la ayuda de la sección.
+document.querySelectorAll('.letter-card').forEach(card=>card.addEventListener('toggle',()=>{if(card.open){document.querySelectorAll('.letter-card').forEach(other=>{if(other!==card)other.open=false})}}));
 const start = new Date('2026-10-30T00:00:00-06:00');
 function updateCounter(){let diff=Math.max(0,Date.now()-start.getTime());let d=Math.floor(diff/86400000);diff%=86400000;let h=Math.floor(diff/3600000);diff%=3600000;let m=Math.floor(diff/60000);let s=Math.floor((diff%60000)/1000);document.getElementById('days').textContent=d;document.getElementById('hours').textContent=String(h).padStart(2,'0');document.getElementById('minutes').textContent=String(m).padStart(2,'0');document.getElementById('seconds').textContent=String(s).padStart(2,'0')}
 updateCounter();setInterval(updateCounter,1000);
