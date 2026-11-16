@@ -226,10 +226,13 @@ document.getElementById('sharePage').addEventListener('click',async()=>{
 });
 // Indicar en la navegación la sección que se está leyendo.
 const sectionLinks=[...document.querySelectorAll('.navlinks a[href^="#"]')];
+let activeSectionHref="";
 const sectionObserver=new IntersectionObserver(entries=>{
   const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
   if(!visible.length)return;
   const current="#"+visible[0].target.id;
+  if(current===activeSectionHref)return;
+  activeSectionHref=current;
   sectionLinks.forEach(link=>{
     if(link.getAttribute("href")===current)link.setAttribute("aria-current","location");
     else link.removeAttribute("aria-current");
@@ -237,8 +240,10 @@ const sectionObserver=new IntersectionObserver(entries=>{
   const activeLink=sectionLinks.find(link=>link.getAttribute("href")===current);
   const nav=document.querySelector(".navlinks");
   if(activeLink&&nav&&window.matchMedia("(max-width:700px)").matches&&nav.scrollWidth>nav.clientWidth){
-    const target=activeLink.offsetLeft-nav.offsetLeft-(nav.clientWidth-activeLink.offsetWidth)/2;
-    nav.scrollTo({left:Math.max(0,target),behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+    const linkRect=activeLink.getBoundingClientRect();
+    const navRect=nav.getBoundingClientRect();
+    const target=nav.scrollLeft+linkRect.left-navRect.left-(nav.clientWidth-linkRect.width)/2;
+    nav.scrollTo({left:Math.max(0,Math.min(target,nav.scrollWidth-nav.clientWidth)),behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
   }
 },{rootMargin:"-130px 0px -60% 0px",threshold:0});
 sectionLinks.forEach(link=>{
