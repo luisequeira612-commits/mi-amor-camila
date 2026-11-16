@@ -136,6 +136,10 @@
     /* Indicador de foco uniforme para enlaces y controles interactivos. */
     :where(a,button):focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:6px}
     .answers button:disabled{cursor:default;opacity:.78}
+
+    /* El contador mantiene sus cifras alineadas y destaca como bloque principal. */
+    .counter .countbox{min-width:0;background:linear-gradient(145deg,#ffffff12,#ffffff06);border-color:#e0c1fa35}
+    .countbox strong{font-variant-numeric:tabular-nums;letter-spacing:.02em}
   </style>
 </head>
 <body>
