@@ -234,6 +234,12 @@ const sectionObserver=new IntersectionObserver(entries=>{
     if(link.getAttribute("href")===current)link.setAttribute("aria-current","location");
     else link.removeAttribute("aria-current");
   });
+  const activeLink=sectionLinks.find(link=>link.getAttribute("href")===current);
+  const nav=document.querySelector(".navlinks");
+  if(activeLink&&nav&&window.matchMedia("(max-width:700px)").matches&&nav.scrollWidth>nav.clientWidth){
+    const target=activeLink.offsetLeft-nav.offsetLeft-(nav.clientWidth-activeLink.offsetWidth)/2;
+    nav.scrollTo({left:Math.max(0,target),behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  }
 },{rootMargin:"-130px 0px -60% 0px",threshold:0});
 sectionLinks.forEach(link=>{
   const section=document.querySelector(link.getAttribute("href"));
