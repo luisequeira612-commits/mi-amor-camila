@@ -21,6 +21,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Generate compatible social preview image
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert -w 1200 -h 630 -o social-preview.png social-preview.svg
+          file social-preview.png
+          test "$(stat -c%s social-preview.png)" -lt 600000
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
